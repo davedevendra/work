@@ -1,0 +1,8 @@
+mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled
+-----------------
+===== START
+C	de9c3771135259ebd11b909e63ab66d0	bfd95b5bab3b2387c6fc198006274d24	2018-02-20 21:49:05.000000 +0530	2018-02-20 21:49:05.000000 +0530	2018-02-20 16:29:00.000000 +0530	74da22df9801d010e86731d7d2d872a5	Savings		Transfer to checking				n	-10000/100	-10000/100	1970-01-01 05:30:00.000000 +0530
+C	de9c3771135259ebd11b909e63ab66d0	f53cc77846eb4d15a7951f5e344653e4	2018-02-20 21:49:05.000000 +0530	2018-02-20 21:49:05.000000 +0530	2018-02-20 16:29:00.000000 +0530	0da9996ada87c70320b8596383bf6fa1	Checking		Transfer to checking				n	10000/100	10000/100	1970-01-01 05:30:00.000000 +0530
+===== END
+===== START
+===== END

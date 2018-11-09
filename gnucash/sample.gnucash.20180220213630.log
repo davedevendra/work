@@ -1,0 +1,10 @@
+mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled
+-----------------
+===== START
+===== END
+===== START
+C	8fe7972c7506546836e3fba4b688fbae	841e75d0907502f920f007ca109ff1b0	2018-02-20 21:37:39.000000 +0530	2018-02-20 21:37:39.000000 +0530	2018-02-20 16:29:00.000000 +0530	d5aa597be2da496c3e2628456b37dfe1	Visa		Starting Balance				n	-50000/100	-50000/100	1970-01-01 05:30:00.000000 +0530
+C	8fe7972c7506546836e3fba4b688fbae	8bb49e4c7445b6d810b65a06ab99995e	2018-02-20 21:37:39.000000 +0530	2018-02-20 21:37:39.000000 +0530	2018-02-20 16:29:00.000000 +0530	871bd7ae8f67031a7260db2a34187557	Opening Balance		Starting Balance				n	50000/100	50000/100	1970-01-01 05:30:00.000000 +0530
+===== END
+===== START
+===== END

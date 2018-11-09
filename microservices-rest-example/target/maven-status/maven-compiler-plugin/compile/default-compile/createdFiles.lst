@@ -1,0 +1,9 @@
+pl/finsys/example/service/BookServiceImpl.class
+pl/finsys/example/repository/BookRepository.class
+pl/finsys/example/client/ExampleClient.class
+pl/finsys/example/service/exception/BookAlreadyExistsException.class
+pl/finsys/example/controller/BookController.class
+pl/finsys/example/configuration/SwaggerConfig.class
+pl/finsys/example/BookstoreApplication.class
+pl/finsys/example/service/BookService.class
+pl/finsys/example/domain/Book.class

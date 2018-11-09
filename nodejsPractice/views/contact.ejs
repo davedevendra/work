@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="/assets/styles.css" rel="stylesheet" type="text/css">
+		<body>
+			<% include partial/nav.ejs %>
+			<h1>Contact US</h1>
+			<p>You can contact us on 901-901-9999</p>
+			
+			<form id="contact-form" method="POST" action="/contact">
+				<p><label for="who"> Who do you want to contact?</label>
+				<input type="text" name="who" id="who" value="<%= qrp.name %>"></p>
+				<p><label for="department">Which Department?</label>
+				<input type="text" name="department" id="department" value="<%= qrp.department %>"></p>
+				<p><label for="email">Your Email</label>
+				<input type="email" name="email" id="email" value="<%= qrp.email %>"></p>
+				<p><input type="submit" value="submit"></p>
+			</form>
+		</body>
+	</head>
+</html>

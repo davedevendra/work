@@ -1,0 +1,8 @@
+mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled
+-----------------
+===== START
+C	83d3ff5f05682351e15447e08b39db38	baf2469fc96ac2eab2f334471e1564aa	2018-02-20 21:50:50.000000 +0530	2018-02-20 21:50:50.000000 +0530	2018-02-20 16:29:00.000000 +0530	0da9996ada87c70320b8596383bf6fa1	Checking						n	-4521/100	-4521/100	1970-01-01 05:30:00.000000 +0530
+C	83d3ff5f05682351e15447e08b39db38	2c174f74fbd2d816bc7d27591dc991b5	2018-02-20 21:50:50.000000 +0530	2018-02-20 21:50:50.000000 +0530	2018-02-20 16:29:00.000000 +0530	833cdad779e9eb335d9c236f631b0b09	Groceries						n	4521/100	4521/100	1970-01-01 05:30:00.000000 +0530
+===== END
+===== START
+===== END

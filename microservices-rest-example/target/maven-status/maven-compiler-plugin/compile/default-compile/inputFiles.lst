@@ -1,0 +1,9 @@
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/BookstoreApplication.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/service/exception/BookAlreadyExistsException.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/configuration/SwaggerConfig.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/domain/Book.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/repository/BookRepository.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/service/BookServiceImpl.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/controller/BookController.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/service/BookService.java
+/home/devendra/work/microservices-rest-example/src/main/java/pl/finsys/example/client/ExampleClient.java
