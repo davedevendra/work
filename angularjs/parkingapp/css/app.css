@@ -1,0 +1,96 @@
+  .selected {
+    -webkit-transition: all 5s linear;
+    -moz-transition: all 5s linear;
+    -ms-transition: all 5s linear;
+    -o-transition:  all 5s linear;
+    transition: all 5s linear;  
+    background-color: #FAFAD2 !important;
+  }
+
+  .selected-add-class {
+    opacity: 0;
+  }
+
+  .selected-add-class-active {
+    opacity: 1;
+  }
+
+     
+  .alert {
+    background-color: #F2DEDE;
+    border: 1px solid #EED3D7;
+    color: #B94A48;
+    padding: 20px;
+    border-radius: 5px;
+  }
+     
+  .alert-topic {
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+  }
+     
+  .alert-description {
+    font-size: 16px;
+  }
+  
+  .accordion-item {
+    border: 1px solid #CCCCCC;
+    cursor: pointer;
+    background: -moz-linear-gradient(top, #CCCCCC, #EEEEEE);
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px 5px 0px 0px;
+    margin-top: 10px;
+  }
+  
+  .accordion-description {
+    border: 1px dashed #CCCCCC;
+    border-top: 0px;
+    border-radius: 0px 0px 5px 5px;
+    background-color: #FFFFFF;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .ng-enter {
+    -webkit-transition: all 5s linear;
+    -moz-transition: all 5s linear;
+    -ms-transition: all 5s linear;
+    -o-transition:  all 5s linear;
+    transition: all 5s linear;
+    opacity: 0;
+  }
+
+  .ng-enter-active {
+    opacity: 1;
+  }
+
+  .ng-leave {
+    -webkit-transition: all 5s linear;
+    -moz-transition: all 5s linear;
+    -ms-transition: all 5s linear;
+    -o-transition:  all 5s linear;
+    transition: all 5s linear;
+    opacity: 1;
+  }
+
+  .ng-leave-active {
+    opacity: 0;
+  }
+
+  .ng-hide-add {
+    -webkit-transition: all 5s linear;
+    -moz-transition: all 5s linear;
+    -ms-transition: all 5s linear;
+    -o-transition:  all 5s linear;
+    transition: all 5s linear;
+    opacity: 1;   
+  }
+
+  .ng-hide-add-active {
+    display: block !important;
+    opacity: 0;
+  }

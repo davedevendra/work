@@ -1,0 +1,16 @@
+{
+  "name": "angular",
+  "version": "1.2.19-build.255+sha.d71f16e",
+  "main": "./angular.js",
+  "dependencies": {},
+  "homepage": "https://github.com/angular/bower-angular",
+  "_release": "1.2.19-build.255+sha.d71f16e",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.19-build.255+sha.d71f16e",
+    "commit": "c2f100c5dce0f4b59cfc6714ff58acf737616560"
+  },
+  "_source": "git://github.com/angular/bower-angular.git",
+  "_target": "~1.2.18",
+  "_originalSource": "angular"
+}
