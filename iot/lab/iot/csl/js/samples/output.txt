@@ -1,0 +1,54 @@
+[devendra@localhost samples]$ ./run-device-node-sample.sh MyHelloWorldSensor.js AAAAAAQB7RGA-CA5 Admin123
+executing ./run-device-node-sample.sh from .
+[iotcs:info] Oracle IoT Cloud Device Client Library v1.1 loaded!
+true
+-----------------MY DEVICE MODEL----------------------------
+{
+    "urn": "urn:test:js:helloworld",
+    "name": "HelloWorld-JS-DeviceModel",
+    "description": "Device Model for the JavaScript HelloWorld Application",
+    "system": false,
+    "draft": false,
+    "created": 1541514763031,
+    "createdAsString": "2018-11-06T14:32:43.031Z",
+    "lastModified": 1541514763031,
+    "lastModifiedAsString": "2018-11-06T14:32:43.031Z",
+    "userLastModified": "ora002",
+    "attributes": [
+        {
+            "description": "This attribute stores the Hello World message",
+            "name": "message",
+            "type": "STRING",
+            "writable": true
+        }
+    ],
+    "actions": [],
+    "formats": [],
+    "links": [
+        {
+            "href": "https://TCSIoTStackIOTJLS-ocuocictrng18.uscom-central-1.oraclecloud.com/iot/api/v2/deviceModels/urn%253Atest%253Ajs%253Ahelloworld",
+            "rel": "self"
+        },
+        {
+            "href": "https://TCSIoTStackIOTJLS-ocuocictrng18.uscom-central-1.oraclecloud.com/iot/api/v2/deviceModels/urn%253Atest%253Ajs%253Ahelloworld",
+            "rel": "canonical"
+        }
+    ],
+    "devicePolicies": {
+        "links": [
+            {
+                "href": "https://TCSIoTStackIOTJLS-ocuocictrng18.uscom-central-1.oraclecloud.com/iot/api/v2/deviceModels/urn%253Atest%253Ajs%253Ahelloworld/devicePolicies",
+                "rel": "devicePolicies"
+            }
+        ]
+    }
+}
+------------------------------------------------------------
+[iotcs:info] updating attribute "message" of type "STRING" from null to 8
+[iotcs:info] updating attribute "message" of type "STRING" from 8 to 47
+[iotcs:info] updating attribute "message" of type "STRING" from 47 to 8
+[iotcs:info] updating attribute "message" of type "STRING" from 8 to 16
+[iotcs:info] updating attribute "message" of type "STRING" from 16 to 1
+[iotcs:info] updating attribute "message" of type "STRING" from 1 to 56
+
+

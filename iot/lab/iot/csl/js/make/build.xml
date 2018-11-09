@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Copyright (c) 2015, 2016, Oracle and/or its affiliates. All rights reserved.
+ -
+ - This software is dual-licensed to you under the MIT License (MIT) and 
+ - the Universal Permissive License (UPL). See the LICENSE file in the root
+ - directory for license terms. You may choose either license, or both.
+ -
+ -->
+
+<project default="full" basedir="." xmlns:if="ant:if">
+    <description>Central build for all JavaScript IOTCS components</description>
+
+    <!-- //////////////////////////////////////// -->
+
+    <property environment="env"/>
+    <condition property="exe" value=".cmd"><os family="windows"/></condition>
+    <property name="exe" value="" />
+
+    <!-- //////////////////////////////////////// -->
+
+    <property name="parentdir" location=".." />
+
+    <property name="buildDir"      location="${parentdir}/build"/>
+    <property name="distDir"       location="${buildDir}/dist"/>
+    <property name="tempDir"       location="${buildDir}/temp"/>
+    <property name="modulesDir"       location="${parentdir}/modules"/>
+
+
+    <property name="buildDocsDir"  location="${buildDir}"/>
+    <property name="docHLDirName" value="docs/virtualization/html"/>
+    <property name="docLLDirName" value="docs/messaging/html"/>
+
+    <property name="jsDocConfFileHL" location="${basedir}/confHL.json"/>
+    <property name="jsDocConfFileLL" location="${basedir}/confLL.json"/>
+
+
+    <!-- //////////////////////////////////////// -->
+
+    <target name="full" depends="clean,build,docs"/>
+
+    <!-- //////////////////////////////////////// -->
+
+    <target name="clean">
+        <delete dir="${buildDir}"/>
+    </target>
+
+    <!-- //////////////////////////////////////// -->
+
+    <target name="build">
+        <echo message="building..."/>
+        <mkdir dir="${buildDir}"/>
+        <exec executable="node">
+            <arg line="build.js"/>
+        </exec>
+        <mkdir dir="${modulesDir}"/>
+        <copy todir="${modulesDir}">
+            <fileset dir="${buildDir}/modules" includes="**"/>
+        </copy>
+    </target>
+
+    <!-- //////////////////////////////////////// -->
+
+    <target name="dist" depends="build">
+        <mkdir dir="${distDir}"/>
+        <copy todir="${distDir}">
+            <fileset dir="${buildDir}/modules" includes="**"/>
+        </copy>
+    </target>
+
+    <!-- //////////////////////////////////////// -->
+
+    <target name="docs" depends="build">
+        <mkdir dir="${buildDocsDir}"/>
+        <mkdir dir="${tempDir}"/>
+        <local name="libraryhl"/>
+        <copy file="${basedir}/layoutHL.tmpl" tofile="${basedir}/layoutHL-temp.tmpl"/>
+        <copy file="${basedir}/layoutLL.tmpl" tofile="${basedir}/layoutLL-temp.tmpl"/>
+        <replace file="${basedir}/layoutHL-temp.tmpl" token="@release@" value=""/>
+        <replace file="${basedir}/layoutLL-temp.tmpl" token="@release@" value=""/>
+        <property name="libraryhl" value="${tempDir}/iotcs.bundle.hl.web.js"/>
+        <echo message="generating jsdoc for ${libraryhl}"/>
+        <exec executable="jsdoc${exe}">
+            <arg line="-c ${jsDocConfFileHL} ${libraryhl} -d ${buildDocsDir}/${docHLDirName}"/>
+        </exec>
+        <local name="libraryll"/>
+        <property name="libraryll" value="${tempDir}/iotcs.bundle.ll.web.js"/>
+        <echo message="generating jsdoc for ${libraryll}"/>
+        <exec executable="jsdoc${exe}">
+            <arg line="-c ${jsDocConfFileLL} ${libraryll} -d ${buildDocsDir}/${docLLDirName}"/>
+        </exec>
+        <delete file="${basedir}/layoutHL-temp.tmpl"/>
+        <delete file="${basedir}/layoutLL-temp.tmpl"/>
+        <delete dir="${tempDir}"/>
+    </target>
+
+    <!-- //////////////////////////////////////// -->
+
+</project>

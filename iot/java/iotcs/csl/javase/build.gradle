@@ -1,0 +1,498 @@
+/*
+ * Copyright (c) 2015, 2016, Oracle and/or its affiliates.  All rights reserved.
+ *
+ * This software is dual-licensed to you under the MIT License (MIT) and 
+ * the Universal Permissive License (UPL).  See the LICENSE file in the root
+ * directory for license terms.  You may choose either license, or both.
+ */
+
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+/******************************************************************************
+ *                              Build Options                                 
+ * -PWITH_ENUMERATION - (default true) includes Resource and Message 
+ *     enumeration.
+ *     If set to false Resource and Message enumeration support are excluded
+ *     from enterprise-library.jar
+ *
+ * -PWITH_VIRTUALIZATION - (default true) includes virtualization support in 
+ *     device-library.jar. If set to false virtualization support is 
+ *     excluded from device-library.jar.
+ *     
+ *****************************************************************************/
+def withVirtualization = Boolean.TRUE
+def withEnumeration = Boolean.TRUE
+
+if (project.hasProperty("WITH_VIRTUALIZATION")) {
+    withVirtualization = 
+        Boolean.parseBoolean(WITH_VIRTUALIZATION).booleanValue()
+}
+if (project.hasProperty("WITH_ENUMERATION")) {
+    withEnumeration = Boolean.parseBoolean(WITH_ENUMERATION).booleanValue()
+}
+
+apply plugin: 'java'
+
+repositories {
+    maven { url 'https://repo.eclipse.org/content/repositories/paho' }
+    mavenCentral()
+}
+
+configurations {
+    paho
+}
+
+/******************************************************************************
+ *                              Project properties                            *
+ *****************************************************************************/
+
+def CLIENT_LIBRARY_LIB_DIR = rootDir.getAbsolutePath() + "/lib"
+def CLIENT_LIBRARY_BIN_DIR = rootDir.getAbsolutePath() + "/bin"
+def CLIENT_LIBRARY_SE_VERSION = 'javase'
+def CLIENT_LIBRARY_JAR_VERSION = '1.1.0'
+
+def DEVICE_LIBRARY_IMPL_TITLE =
+    "Oracle Internet of Things Cloud Service Device Client Library"
+def ENTERPRISE_LIBRARY_IMPL_TITLE = 
+    "Oracle Internet of Things Cloud Service Enterprise Client Library"
+
+def sourceDirs = [ 'src/main/java' ]
+
+/******************************************************************************
+ *                              Local dependencies
+ *****************************************************************************/
+def JSON_JAR_NAME = 'json-20160212.jar'
+def JSON_JAR = 'lib/' + JSON_JAR_NAME
+    
+def DERBY_JAR_NAME = 'derby-10.11.1.1.jar'
+def DERBY_JAR = 'lib/' + DERBY_JAR_NAME
+
+/******************************************************************************
+ *                              Top-level tasks                               *
+ *****************************************************************************/
+
+defaultTasks 'clean', 'jar'
+
+task cleanAll  {
+   doLast {
+       delete buildDir
+       delete "lib/device-library.jar"
+       delete "lib/enterprise-library.jar"
+    }
+}
+clean.dependsOn(cleanAll)
+
+sourceSets {
+    device {
+        java {
+            srcDirs = sourceDirs
+
+            include 'oracle/iot/inject/**'
+            include 'oracle/iot/client/device/**'
+            include 'com/oracle/iot/client/device/**'
+            include 'com/oracle/iot/client/impl/device/**'
+            include 'com/oracle/iot/shared/**'
+
+            include 'com/oracle/iot/client/impl/http/**'
+
+            // requires MessageDispatcher
+            include 'com/oracle/iot/client/impl/Diagnostics.java'
+			include 'com/oracle/iot/client/impl/DiagnosticsImpl.java'
+            include 'com/oracle/iot/client/impl/TestConnectivity.java'
+        }
+    }
+
+    bootstrapper {
+        java {
+            srcDirs = sourceDirs
+            include 'com/oracle/iot/client/util/Bootstrapper.java'
+        }
+    }
+
+    networkProvisioner {
+        java {
+            srcDirs = sourceDirs
+            include 'com/oracle/iot/client/impl/trust/**'
+            include 'com/oracle/iot/client/impl/util/**'
+            include 'com/oracle/iot/client/trust/**'
+            include 'com/oracle/iot/client/util/Bootstrapper.java'
+            include 'com/oracle/iot/client/util/NetworkProvisioner.java'
+        }
+    }
+
+    enterprise {
+        java {
+            srcDirs = sourceDirs
+
+            include 'oracle/iot/client/enterprise/**'
+            include 'com/oracle/iot/client/enterprise/**'
+            include 'com/oracle/iot/client/impl/enterprise/**'
+
+            include 'com/oracle/iot/client/impl/http/**'
+
+            if (!withEnumeration) {
+
+            exclude 'com/oracle/iot/client/enterprise/MessageEnumerator.java'
+            exclude 'com/oracle/iot/client/enterprise/Resource.java'
+            exclude 'com/oracle/iot/client/enterprise/ResourceEnumerator.java'
+            exclude 'com/oracle/iot/client/impl/enterprise/MessageIterator.java'
+            exclude 'com/oracle/iot/client/impl/enterprise/MessagePoller.java'
+            exclude 'com/oracle/iot/client/impl/enterprise/ResourceImpl.java'
+
+            }
+        }
+    }
+
+
+    novdevice {
+        java {
+            srcDirs = sourceDirs
+
+            include 'com/oracle/iot/client/impl/http/**'
+            include 'com/oracle/iot/client/impl/device/http/**'
+            include 'com/oracle/iot/client/impl/device/mqtt/**'
+
+            include 'com/oracle/iot/client/device/util/*.java'
+            exclude 'com/oracle/iot/client/device/util/MessageDispatcher.java'
+
+            // DirectlyConnectedDevice.java requires GatewayDevice.java
+            // for an "instanceof" check
+            include 'com/oracle/iot/client/device/*.java'
+
+            include 'com/oracle/iot/shared/**'
+            include 'com/oracle/iot/client/impl/device/*.java'
+            exclude 'com/oracle/iot/client/impl/device/AlertImpl.java'
+            exclude 'com/oracle/iot/client/impl/device/DataImpl.java'
+            exclude 'com/oracle/iot/client/impl/device/MessageDispatcherImpl.java'
+            exclude 'com/oracle/iot/client/impl/device/VirtualDeviceAttributeImpl.java'
+            exclude 'com/oracle/iot/client/impl/device/VirtualDeviceImpl.java'
+        }
+    }
+
+    main {
+        java {
+            srcDirs = sourceDirs
+
+            include 'oracle/iot/client/*.java'
+            include 'oracle/iot/client/enterprise/Filter.java'
+            include 'oracle/iot/client/enterprise/UserAuthenticationException.java'
+            include 'com/oracle/iot/client/*.java'
+            include 'com/oracle/iot/client/util/*.java'
+            include 'com/oracle/iot/client/impl/*.java'
+
+            include 'com/oracle/iot/client/impl/trust/**'
+            include 'com/oracle/iot/client/impl/util/**'
+            include 'com/oracle/iot/client/trust/**'
+            include 'com/oracle/iot/client/message/**'
+
+            include 'com/oracle/iot/client/impl/http/**'
+
+            exclude 'com/oracle/iot/client/impl/Diagnostics.java'
+			exclude 'com/oracle/iot/client/impl/DiagnosticsImpl.java'
+            exclude 'com/oracle/iot/client/impl/TestConnectivity.java'
+        }
+    }
+
+    novmain {
+        java {
+            srcDirs = sourceDirs
+
+            include 'oracle/iot/client/DeviceModel.java'
+
+            // required by DeviceModelFactory
+            include 'oracle/iot/client/enterprise/Filter.java'
+            include 'oracle/iot/client/enterprise/UserAuthenticationException.java'
+
+            include 'com/oracle/iot/client/*.java'
+            exclude 'com/oracle/iot/client/VirtualDeviceAttribute.java'
+
+            include 'com/oracle/iot/client/util/*.java'
+            include 'com/oracle/iot/client/impl/*.java'
+            exclude 'com/oracle/iot/client/impl/Diagnostics.java'
+			exclude 'com/oracle/iot/client/impl/DiagnosticsImpl.java'
+            exclude 'com/oracle/iot/client/impl/TestConnectivity.java'
+            exclude 'com/oracle/iot/client/impl/VirtualDeviceAttributeBase.java'
+            exclude 'com/oracle/iot/client/impl/VirtualDeviceBase.java'
+
+            include 'com/oracle/iot/client/impl/trust/**'
+            include 'com/oracle/iot/client/impl/util/**'
+            include 'com/oracle/iot/client/trust/**'
+            include 'com/oracle/iot/client/message/**'
+
+            include 'com/oracle/iot/client/impl/http/**'
+        }
+    }
+}
+
+// project configuration
+dependencies {
+
+    paho (group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.1.0')
+
+    compile files(JSON_JAR)
+    compile files(DERBY_JAR)
+    compile configurations.paho
+
+    enterpriseCompile files(JSON_JAR)
+    enterpriseCompile files(DERBY_JAR)
+    enterpriseCompile sourceSets.main.output
+    deviceCompile files(JSON_JAR)
+    deviceCompile files(DERBY_JAR)
+    deviceCompile sourceSets.main.output
+    deviceCompile configurations.paho
+    novmainCompile files(JSON_JAR)
+    novmainCompile files(DERBY_JAR)
+    novdeviceCompile files(JSON_JAR)
+    novdeviceCompile files(DERBY_JAR)
+    novdeviceCompile sourceSets.novmain.output
+    novdeviceCompile configurations.paho
+    bootstrapperCompile sourceSets.main.output
+}
+
+assemble {
+    doLast {
+        copy {
+            from fileTree(libsDir).include('**')
+            into CLIENT_LIBRARY_LIB_DIR
+        }
+        delete "${CLIENT_LIBRARY_LIB_DIR}/java.jar"
+    }
+}
+
+// **************************************************************
+// Set exportAdvanced to Boolean.TRUE to export advanced packages
+// **************************************************************
+def exportAdvanced = Boolean.TRUE
+
+def OSGI_DEVICE_EXPORT_PACKAGE = "oracle.iot.client,oracle.iot.client.device"
+def OSGI_ENTERPRISE_EXPORT_PACKAGE = "oracle.iot.client,oracle.iot.client.enterprise"
+
+def ADVANCED_DEVICE_PACKAGES = "com.oracle.iot.client,com.oracle.iot.client.util,com.oracle.iot.client.device,com.oracle.iot.client.device.util,com.oracle.iot.client.message,com.oracle.iot.client.trust"
+def ADVANCED_ENTERPRISE_PACKAGES = "com.oracle.iot.client,com.oracle.iot.client.util,com.oracle.iot.client.enterprise,com.oracle.iot.client.message,com.oracle.iot.client.trust"
+
+def OSGI_DEVICE_PRIVATE_PACKAGE = "${ADVANCED_DEVICE_PACKAGES},com.oracle.iot.client.impl"
+def OSGI_ENTERPRISE_PRIVATE_PACKAGE = "${ADVANCED_ENTERPRISE_PACKAGES},com.oracle.iot.client.impl"
+def OSGI_IMPORT_PACKAGE = "javax.crypto,javax.crypto.spec,javax.net.ssl,org.json,javax.sql,org.apache.derby.jdbc"
+
+if (exportAdvanced) {
+    OSGI_DEVICE_PRIVATE_PACKAGE = "com.oracle.iot.client.impl"
+    OSGI_ENTERPRISE_PRIVATE_PACKAGE = "com.oracle.iot.client.impl"
+    OSGI_DEVICE_EXPORT_PACKAGE = OSGI_DEVICE_EXPORT_PACKAGE + "," + ADVANCED_DEVICE_PACKAGES
+    OSGI_ENTERPRISE_EXPORT_PACKAGE = OSGI_ENTERPRISE_EXPORT_PACKAGE + "," + ADVANCED_ENTERPRISE_PACKAGES
+}
+
+task deviceClientJar (type: Jar) {
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    if (withVirtualization) {
+        from(sourceSets.main.output)
+        from(sourceSets.device.output)
+    } else {
+        from(sourceSets.novmain.output)
+        from(sourceSets.novdevice.output)
+    }
+
+    // Default gradle archive name is 
+    // [baseName]-[appendix]-[version]-[classifier].[extension]
+    // Our spec is: 
+    // iotcs-csl-<PLATFORM-VERSION>-<VERSION>>.jar
+
+    baseName = "device-library"
+    //appendix = "${CLIENT_LIBRARY_SE_VERSION}"
+    //version = CLIENT_LIBRARY_JAR_VERSION
+
+    manifest {
+        attributes(
+            "Implementation-Title" : DEVICE_LIBRARY_IMPL_TITLE,
+            "Implementation-Version" : CLIENT_LIBRARY_JAR_VERSION,
+            "Bundle-ManifestVersion" : '2',
+            "Bundle-Name" : 'Device Library',
+            "Bundle-SymbolicName" : 'oracle.iot.client.device',
+            "Bundle-Version" : CLIENT_LIBRARY_JAR_VERSION,
+            "Class-Path" : JSON_JAR_NAME + ' ' + DERBY_JAR_NAME,
+            "Import-Package" : OSGI_IMPORT_PACKAGE,
+            "Export-Package" : OSGI_DEVICE_EXPORT_PACKAGE,
+            "Private-Package" : OSGI_DEVICE_PRIVATE_PACKAGE
+        )
+    }
+
+    from "${project.rootProject.rootDir}/legal/LICENSE"
+
+    doLast {
+        copy {
+            from archivePath
+            into CLIENT_LIBRARY_LIB_DIR
+        }
+    }
+}
+
+task enterpriseClientJar (type: Jar) {
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.output)
+    from(sourceSets.enterprise.output)
+
+    // Default gradle archive name is 
+    // [baseName]-[appendix]-[version]-[classifier].[extension]
+    // Our spec is: 
+    // iotcs-csl-<PLATFORM-VERSION>-<VERSION>>.jar
+
+    baseName = "enterprise-library"
+    //appendix = "${CLIENT_LIBRARY_SE_VERSION}"
+    //version = CLIENT_LIBRARY_JAR_VERSION
+
+    manifest {
+        attributes(
+            "Implementation-Title" : ENTERPRISE_LIBRARY_IMPL_TITLE,
+            "Implementation-Version" : CLIENT_LIBRARY_JAR_VERSION,
+            "Bundle-ManifestVersion" : '2',
+            "Bundle-Name" : 'Enterprise Library',
+            "Bundle-SymbolicName" : 'oracle.iot.client.enterprise',
+            "Bundle-Version" : CLIENT_LIBRARY_JAR_VERSION,
+            "Class-Path" : JSON_JAR_NAME,
+            "Import-Package" : OSGI_IMPORT_PACKAGE,
+            "Export-Package" : OSGI_ENTERPRISE_EXPORT_PACKAGE,
+            "Private-Package" : OSGI_ENTERPRISE_PRIVATE_PACKAGE
+        )
+    }
+
+    from "${project.rootProject.rootDir}/legal/LICENSE"
+
+    doLast {
+        copy {
+            from archivePath
+            into CLIENT_LIBRARY_LIB_DIR
+        }
+    }
+}
+
+task bootstrapperJar (type: Jar) {
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.bootstrapper.output)
+
+    baseName = "bootstrapper"
+
+    manifest {
+        attributes(
+                "Implementation-Title" : DEVICE_LIBRARY_IMPL_TITLE,
+                "Implementation-Version" : CLIENT_LIBRARY_JAR_VERSION,
+                "Class-Path" : deviceClientJar.archiveName + ' ' + JSON_JAR_NAME
+        )
+    }
+
+    from "${project.rootProject.rootDir}/legal/LICENSE"
+
+    doLast {
+        copy {
+            from archivePath
+            into CLIENT_LIBRARY_LIB_DIR
+        }
+    }
+}
+
+task networkProvisionerJar (type: Jar) {
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.networkProvisioner.output)
+
+    baseName = "network-provisioner"
+
+    manifest {
+        attributes(
+                "Implementation-Title" : DEVICE_LIBRARY_IMPL_TITLE,
+                "Implementation-Version" : CLIENT_LIBRARY_JAR_VERSION,
+                "Main-Class" : "com.oracle.iot.client.util.NetworkProvisioner"
+        )
+    }
+
+    from "${project.rootProject.rootDir}/legal/LICENSE"
+
+    doLast {
+        copy {
+            from archivePath
+            into CLIENT_LIBRARY_BIN_DIR
+        }
+    }
+}
+
+// Use this jar task to hang the other jar tasks from
+task jar(type: Jar, overwrite: true) {
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Get rid of the empty jar file.
+    doLast {
+        delete archivePath
+    }
+}
+jar.dependsOn(deviceClientJar)
+jar.dependsOn(enterpriseClientJar)
+jar.dependsOn(bootstrapperJar)
+jar.dependsOn(networkProvisionerJar)
+// Even though assemble invokes the jar task it does not invoke its dependent
+// tasks
+assemble.dependsOn(deviceClientJar)
+assemble.dependsOn(enterpriseClientJar)
+assemble.dependsOn(bootstrapperJar)
+assemble.dependsOn(networkProvisionerJar)
+
+task virtualizationDoc(type: Javadoc) {
+    failOnError = false
+    options.classpath = [
+        sourceSets.main.output.classesDir,
+        sourceSets.device.output.classesDir,
+        sourceSets.enterprise.output.classesDir,
+        new File(JSON_JAR)
+    ]
+    source = sourceSets.main.java.matching(
+            {include 'oracle/iot/client/**'})
+        .plus(sourceSets.device.java.matching(
+            {include 'oracle/iot/client/**'}))
+        .plus(sourceSets.enterprise.java.matching(
+            {include 'oracle/iot/client/**'}))
+
+    destinationDir = new File("apidocs/virtualization")
+}
+
+task messagingDoc(type: Javadoc) {
+    failOnError = false
+    options.classpath = [
+        sourceSets.main.output.classesDir,
+        sourceSets.device.output.classesDir,
+        sourceSets.enterprise.output.classesDir,
+        new File(JSON_JAR)
+    ] + sourceSets.device.compileClasspath.asType(List)
+
+    source = sourceSets.main.java.matching({
+            include 'com/oracle/iot/client/**'
+            exclude 'com/oracle/iot/client/impl/**',
+               'com/oracle/iot/client/trust/DefaultTrustedAssetsManager.java', 
+               'com/oracle/iot/client/trust/TrustedAssetsProvisioner.java'})
+        .plus(sourceSets.device.java.matching({
+            include 'com/oracle/iot/client/**'
+            exclude 'com/oracle/iot/client/impl/**'}))
+        .plus(sourceSets.enterprise.java.matching({
+            include 'com/oracle/iot/client/**'
+            exclude 'com/oracle/iot/client/impl/**'}))
+
+    destinationDir = new File("apidocs/messaging")
+}
+
+task javadoc(overwrite: true) {
+    dependsOn(assemble)
+    dependsOn(virtualizationDoc)
+    dependsOn(messagingDoc)
+
+}
+
+task doc(dependsOn: javadoc) {
+}
+
+task dist(type: Copy, dependsOn: jar) {
+    from ("lib")
+    include "device-library.jar"
+    include "enterprise-library.jar"
+    into "build/dist"
+}
