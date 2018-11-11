@@ -5,10 +5,44 @@
 <h1>Test Component</h1>
 
 <h2>Welcome {{name}}</h2>
-
+<!--
 <h2 [class]="isSuccess">Welcome {{name}}</h2>
 <h2 [class.text-danger]="hasError">Welcome {{name}}</h2>
 <h2 [ngClass]="messageClasses">Welcome {{name}}</h2>
+<h2 [style.color]="'orange'">Welcome {{name}}</h2>
+<h2 [style.color]="styleProperty">Welcome {{name}}</h2>
+<h2 [style.color]="hasError ? 'red':'blue'">Welcome {{name}}</h2>
+<h2 [ngStyle]="styleMessages">Welcome {{name}}</h2>
+
+
+<h1>Event</h1>
+
+<button (click)="clickMe($event)">Greet</button>
+{{greetMsg}}
+
+<h1>Template Reference Variable</h1>
+<input #textMsg type="text">
+<button (click)="logMessage(textMsg.value)">Log</button>
+
+<h1> Two Way Data Binding</h1>
+<input [(ngModel)]="myName" type="text">
+{{myName}}
+-->
+
+<h1> Structural Directives(ngIf,ngSwitch,ngFor)</h1>
+<h2>ngIf</h2>
+
+<button (click)="changeMe()">ChangeMe</button>
+<div *ngIf="displayName; then thenBlock; else elseBlock">
+
+</div>
+
+<ng-template #thenBlock>
+  <h3>This is then block. {{displayName}} - Devendra</h3> 
+</ng-template>
+<ng-template #elseBlock>
+  <h3>This is else Block</h3>
+</ng-template>
 
 
 
