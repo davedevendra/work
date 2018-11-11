@@ -6,5 +6,11 @@
 
 <h2>Welcome {{name}}</h2>
 
-<h3><input [id]="myId" type="text" [value]="name"/></h3>
+<h2 [class]="isSuccess">Welcome {{name}}</h2>
+<h2 [class.text-danger]="hasError">Welcome {{name}}</h2>
+<h2 [ngClass]="messageClasses">Welcome {{name}}</h2>
+
+
+
+
 
