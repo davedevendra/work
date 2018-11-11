@@ -24,46 +24,49 @@ import { InterpolationConfig } from '@angular/compiler';
   })
 export class TestComponent implements OnInit {
 
-  public name: string = "Dave";
-  public myId: string = "myTestId";
-  public isDisabled: boolean = false;
+  public name = 'Dave';
+  public myId = 'myTestId';
+  public isDisabled = false;
 
-  public isSuccess: string = "text-success";
-  public error: string = "error";
-  public hasError: boolean = true;
-  public isSpecial: boolean = true;
-  public styleProperty = "blue";
+  public isSuccess = 'text-success';
+  public error = 'error';
+  public hasError = true;
+  public isSpecial = true;
+  public styleProperty = 'blue';
 
   public messageClasses = {
-    "text-success": !this.hasError,
-    "text-danger": this.hasError,
-    "text-special": this.isSpecial
-  }
+    'text-success': !this.hasError,
+    'text-danger': this.hasError,
+    'text-special': this.isSpecial
+  };
 
   public styleMessages = {
     color: 'blue',
     fontStyle: 'italic'
-  }
-  
-  //events
-  public greetMsg: string = "";
-  //template Reference variable
+  };
 
-  //two way data binding.
-  public myName = "";
+  // events
+  public greetMsg = '';
+  // template Reference variable
 
-  //structural directives
+  // two way data binding.
+  public myName = '';
+
+  // structural directives
   public displayName = true;
+
+  public myColor = 'blue';
+
   constructor() { }
 
   ngOnInit() {
   }
 
   clickMe(event) {
-    console.log("Welcome to Greet Event");
+    console.log('Welcome to Greet Event');
     console.log(event);
     console.log(event.type);
-    this.greetMsg = "Welcome to Greet Event -> " + event.type;
+    this.greetMsg = 'Welcome to Greet Event -> ' + event.type;
   }
 
   logMessage(value) {
@@ -71,8 +74,11 @@ export class TestComponent implements OnInit {
   }
 
   changeMe() {
-
     this.displayName = !this.displayName;
+  }
+
+  selectColor(value) {
+    this.myColor = value;
   }
 
 }

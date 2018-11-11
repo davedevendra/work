@@ -38,13 +38,26 @@
 </div>
 
 <ng-template #thenBlock>
-  <h3>This is then block. {{displayName}} - Devendra</h3> 
+  <h3>This is then block. {{displayName}} - Devendra</h3>
 </ng-template>
 <ng-template #elseBlock>
   <h3>This is else Block</h3>
 </ng-template>
 
+<h2>ngSwitch</h2>
+<select>
+  <option value="red">Red</option>
+  <option value="blue">Blue</option>
+  <option value="green">Green</option>
+  <option value="None">None</option>
+</select>
 
+<div [ngSwitch]="myColor">
+  <div *ngSwitchCase="'red'">You pick up Red color</div>
+  <div *ngSwitchCase="'blue'">You pick up Blue color</div>
+  <div *ngSwitchCase="'green'">You pick up Green color</div>
+  <div *ngSwitchDefault>Pick again</div>
+</div>
 
 
 
