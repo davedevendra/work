@@ -1,0 +1,15 @@
+--2018-04-23 22:46:03--  https://g21.tcsion.com/LX/file_handlers/show_file?c_id=clp-ea-star-program-generic-self-paced-course-e0-b-903-857
+Resolving g21.tcsion.com (g21.tcsion.com)... 14.140.248.38
+Connecting to g21.tcsion.com (g21.tcsion.com)|14.140.248.38|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://g21.tcsion.com/LX/login [following]
+--2018-04-23 22:46:04--  https://g21.tcsion.com/LX/login
+Reusing existing connection to g21.tcsion.com:443.
+HTTP request sent, awaiting response... 200 OK
+Length: 12631 (12K) [text/html]
+Saving to: ‘show_file?c_id=clp-ea-star-program-generic-self-paced-course-e0-b-903-857’
+
+                  show_file?c_id=cl   0%[                                                                  ]       0  --.-KB/s               show_file?c_id=clp-ea-star-program- 100%[=================================================================>]  12.33K  --.-KB/s    in 0.01s   
+
+2018-04-23 22:46:04 (910 KB/s) - ‘show_file?c_id=clp-ea-star-program-generic-self-paced-course-e0-b-903-857’ saved [12631/12631]
+

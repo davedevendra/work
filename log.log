@@ -1,0 +1,103 @@
+[2018-02-13 14:45:30]                       ____      _             
+[2018-02-13 14:45:30]   _____   _____ _ __ / ___|_ __(_)_   _____   
+[2018-02-13 14:45:30]  / _ \ \ / / _ \ '__| |  _| '__| \ \ / / _ \  
+[2018-02-13 14:45:30] | (_) \ V /  __/ |  | |_| | |  | |\ V /  __/  
+[2018-02-13 14:45:30]  \___/ \_/ \___|_|   \____|_|  |_| \_/ \___|  
+[2018-02-13 14:45:30]                       Google Drive for Linux
+[2018-02-13 14:45:30]   version 3.2.3 beta
+[2018-02-13 14:45:30] 
+[2018-02-13 14:45:30]   by The Fan Club - Copyright (c) 2014-2016   
+[2018-02-13 14:45:30]           http://www.thefanclub.co.za         
+[2018-02-13 14:45:30] 
+[2018-02-13 14:45:30] [INFO] Linux-4.14.16-200.fc26.x86_64-x86_64-with-fedora-26-Twenty_Six
+[2018-02-13 14:45:30] [INFO] Desktop : mate
+[2018-02-13 14:45:30] [CONFIG] Loading User Settings GUI mode
+[2018-02-13 14:45:30] [CONFIG] Auto Sync : True
+[2018-02-13 14:45:30] [CONFIG] Convert Google Docs : False
+[2018-02-13 14:45:32] [CACHE] Active : True
+[2018-02-13 14:45:39] Starting Setup
+[2018-02-13 14:45:39] [SETUP] Step 1 of 3 - Connect Account
+[2018-02-13 14:45:40] [CACHE] Size in Items 		: 0
+[2018-02-13 14:45:40] [CACHE] Cache File Size 	: 0.0 bytes
+[2018-02-13 14:45:40] [CACHE] Google Query Hits 	: 0
+[2018-02-13 14:45:40] [CACHE] Cache Query Hits 	: 0
+[2018-02-13 14:45:40] [CACHE] Cache Performance 	: 0 %
+[2018-02-13 14:45:45] [SETUP] Connecting Google Account
+[2018-02-13 14:46:31]                       ____      _             
+[2018-02-13 14:46:31]   _____   _____ _ __ / ___|_ __(_)_   _____   
+[2018-02-13 14:46:31]  / _ \ \ / / _ \ '__| |  _| '__| \ \ / / _ \  
+[2018-02-13 14:46:31] | (_) \ V /  __/ |  | |_| | |  | |\ V /  __/  
+[2018-02-13 14:46:31]  \___/ \_/ \___|_|   \____|_|  |_| \_/ \___|  
+[2018-02-13 14:46:31]                       Google Drive for Linux
+[2018-02-13 14:46:31]   version 3.2.3 beta
+[2018-02-13 14:46:31] 
+[2018-02-13 14:46:31]   by The Fan Club - Copyright (c) 2014-2016   
+[2018-02-13 14:46:31]           http://www.thefanclub.co.za         
+[2018-02-13 14:46:31] 
+[2018-02-13 14:46:31] [INFO] Linux-4.14.16-200.fc26.x86_64-x86_64-with-fedora-26-Twenty_Six
+[2018-02-13 14:46:31] [INFO] Desktop : mate
+[2018-02-13 14:46:31] [CONFIG] Loading User Settings GUI mode
+[2018-02-13 14:46:31] [CONFIG] Auto Sync : True
+[2018-02-13 14:46:31] [CONFIG] Convert Google Docs : False
+[2018-02-13 14:46:32] [CACHE] Active : True
+[2018-02-13 14:46:35] Starting Setup
+[2018-02-13 14:46:35] [SETUP] Step 1 of 3 - Connect Account
+[2018-02-13 14:46:35] [CACHE] Size in Items 		: 0
+[2018-02-13 14:46:35] [CACHE] Cache File Size 	: 0.0 bytes
+[2018-02-13 14:46:35] [CACHE] Google Query Hits 	: 0
+[2018-02-13 14:46:35] [CACHE] Cache Query Hits 	: 0
+[2018-02-13 14:46:35] [CACHE] Cache Performance 	: 0 %
+[2018-02-13 14:46:38] [SETUP] Connecting Google Account
+[2018-02-13 14:46:54] [SETUP] Validating Authorisation Code
+[2018-02-13 14:46:54] [SETUP] Auth Code : 4/AAB8mP-wPoFf49HGBAU0m7-NqEnHU_JxbBqCDXqr--lY1oBYnn3-OPk
+[2018-02-13 14:46:55] [AUTH] Warning : Could not store Google Drive Credentials
+[2018-02-13 14:46:55] [AUTH] Google Credentials seem Ok
+[2018-02-13 14:46:56] [AUTH] Google Drive Service Started Ok
+[2018-02-13 14:47:00] No Upload Progress
+[2018-02-13 14:47:00] [License] Trial License Activated
+[2018-02-13 14:47:00] [AUTH] App Data Loaded
+[2018-02-13 14:47:00] -----------------------------------------------------------------------------------------
+[2018-02-13 14:47:00] User email : devendra.dave@gmail.com
+[2018-02-13 14:47:00] License : Trial Expires in 14 days
+[2018-02-13 14:47:00] userHome : /home/devendra
+[2018-02-13 14:47:00] Current Locale : ('en_US', 'UTF-8')
+[2018-02-13 14:47:01] Root folder ID : 0AEBzYSMOvMuYUk9PVA
+[2018-02-13 14:47:01] Google Drive Total : 15.0 GB
+[2018-02-13 14:47:01] Google Drive Used  : 1.6 GB
+[2018-02-13 14:47:01] Space used : 10.9 %
+[2018-02-13 14:47:01] Latest Change ID : 44584
+[2018-02-13 14:47:08] -----------------------------------------------------------------------------------------
+[2018-02-13 14:47:08] [SETUP] Step 2 of 3 - Start First Sync
+[2018-02-13 14:47:10] [CACHE] Size in Items 		: 0
+[2018-02-13 14:47:10] [CACHE] Cache File Size 	: 0.0 bytes
+[2018-02-13 14:47:10] [CACHE] Google Query Hits 	: 0
+[2018-02-13 14:47:10] [CACHE] Cache Query Hits 	: 0
+[2018-02-13 14:47:10] [CACHE] Cache Performance 	: 0 %
+[2018-02-13 14:47:56] [SETUP] Disconnecting Google Account : devendra.dave@gmail.com
+[2018-02-13 14:47:56] File Delete Error From /home/devendra/Google Drive/.overgrive.auth
+[2018-02-13 14:47:56] [SETUP] Google Authorisation Code Removed
+[2018-02-13 14:47:56] [CONFIG] All user config settings reset to defaults
+[2018-02-13 14:47:56] [SETUP] Restarting ...
+[2018-02-13 14:47:57]                       ____      _             
+[2018-02-13 14:47:57]   _____   _____ _ __ / ___|_ __(_)_   _____   
+[2018-02-13 14:47:57]  / _ \ \ / / _ \ '__| |  _| '__| \ \ / / _ \  
+[2018-02-13 14:47:57] | (_) \ V /  __/ |  | |_| | |  | |\ V /  __/  
+[2018-02-13 14:47:57]  \___/ \_/ \___|_|   \____|_|  |_| \_/ \___|  
+[2018-02-13 14:47:57]                       Google Drive for Linux
+[2018-02-13 14:47:57]   version 3.2.3 beta
+[2018-02-13 14:47:57] 
+[2018-02-13 14:47:57]   by The Fan Club - Copyright (c) 2014-2016   
+[2018-02-13 14:47:57]           http://www.thefanclub.co.za         
+[2018-02-13 14:47:57] 
+[2018-02-13 14:47:57] [INFO] Linux-4.14.16-200.fc26.x86_64-x86_64-with-fedora-26-Twenty_Six
+[2018-02-13 14:47:57] [INFO] Desktop : mate
+[2018-02-13 14:47:57] [CONFIG] Loading User Settings GUI mode
+[2018-02-13 14:47:57] [CONFIG] Auto Sync : True
+[2018-02-13 14:47:57] [CONFIG] Convert Google Docs : False
+[2018-02-13 14:47:58] [CACHE] Active : True
+[2018-02-13 14:48:00] [SETUP] Step 1 of 3 - Connect Account
+[2018-02-13 14:48:00] [CACHE] Size in Items 		: 0
+[2018-02-13 14:48:00] [CACHE] Cache File Size 	: 0.0 bytes
+[2018-02-13 14:48:00] [CACHE] Google Query Hits 	: 0
+[2018-02-13 14:48:00] [CACHE] Cache Query Hits 	: 0
+[2018-02-13 14:48:00] [CACHE] Cache Performance 	: 0 %

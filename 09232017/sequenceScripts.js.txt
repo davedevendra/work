@@ -1,0 +1,197 @@
+// sequenceScripts
+// 09/23/2017
+// v3.0
+
+
+
+lineResStr = "";
+maindoc = _quote_fcoprocess_document_number;
+print "----" + _system_selected_document_number+">>>"+selectedValveItem_quote;
+
+/*if(selectedValveItem_quote == ""){
+    return lineResStr;
+}*/
+
+parentLineSeqNum="";
+parentLineSeqNumCounter="";
+
+
+
+totalCountChildSpareParts=0;
+totalChildSubModelCount=0;
+childSubModelDocumentNumbers="";
+childSparePartsDocumentNumbers="";
+
+currentLineGroupSequenceNumber=0.0;
+currentLineSequenceNumber=0;
+
+// map to hold the actuator doc number => actuator spare parts counter.
+mapActuatorSparePartsSeqNum = dict("string");
+/***
+for line in line_fcoProcess {
+    currentLineDoc=line._document_number;
+    currentLineLineNumber = line.lineNumber_line;
+    parentLineDocNumber = line.parentLineNumber_line;
+    newActSeqNum = 0.0;
+
+
+    isPart = true;
+    isActuator=false;
+    isModelRow = true;
+    if(parentLineDocNumber == "-1" AND parentLineDocNumber <> "-" AND parentLineDocNumber <> "") {
+        isModelRow=true; // we are at the model row
+        currentLineLineNumber = line.lineNumber_line;
+        currentLineGroupSequenceNumber = atof(line._group_sequence_number);
+
+        parentLineLineNumberF = atof(currentLineLineNumber);
+
+        totalCountChildSpareParts=line.totalCountChildSpareParts_line;
+        totalChildSubModelCount=line.totalChildSubModelCount_line;
+
+        childSubModelDocumentNumbers=line.childSubModelDocumentNumbers_line;
+        childSubModelDocumentNumbersArr = split(childSubModelDocumentNumbers, "#C#");
+        print childSubModelDocumentNumbersArr;
+
+        childSparePartsDocumentNumbers=line.childSparePartsDocumentNumbers_line;
+        childSparePartsDocumentNumbersArr = split(childSparePartsDocumentNumbers, "#S#");
+        print childSparePartsDocumentNumbersArr;
+
+        // first sequence the sub models
+        currentLineLineNumberF = parentLineLineNumberF;
+        newGroupSeqNumberF =  currentLineGroupSequenceNumber;
+        for childSubModelDocumentItem in childSubModelDocumentNumbersArr {
+            if(childSubModelDocumentItem <> "") {
+                currentLineLineNumberF = currentLineLineNumberF + 0.1;
+                newGroupSeqNumberF = newGroupSeqNumberF + 1.0;
+                lineResStr = lineResStr + childSubModelDocumentItem + "~lineNumber_line~" + string(currentLineLineNumberF) +"|";
+                //lineResStr = lineResStr + childSubModelDocumentItem + "~_group_sequence_number~" + string(newGroupSeqNumberF) +"|";
+                put(mapActuatorSparePartsSeqNum,childSubModelDocumentItem, string(currentLineLineNumberF));
+            }
+
+        }
+
+        //now sequence the spare parts
+        currentLineLineNumberF = parentLineLineNumberF;
+        for childSparePartsDocumentItem in childSparePartsDocumentNumbersArr {
+            if(childSparePartsDocumentItem <> "") {
+                currentLineLineNumberF = currentLineLineNumberF + 0.01;
+                lineResStr = lineResStr + childSparePartsDocumentItem + "~lineNumber_line~P-" + string(currentLineLineNumberF) +"|";
+
+            }
+
+        }
+
+    }
+
+}
+/*
+// update the actuator spare parts number
+// correctly
+newActSpareSeqCounter = 0.0;
+relatedActDocNumber = "";
+newActSpareSeqCounterStr="";
+
+for line in line_fcoProcess {
+    cLineDoc=line._document_number;
+    pLineDocNum = line.parentLineNumber_line;
+    itemType = line.itemType_line;
+    if(itemType == "RA") {
+        newActSpareSeqCounter = 0.0;
+        relatedActDocNumber = "";
+        newActSpareSeqCounterStr="";
+
+        // found the related actuator row
+        newActSpareSeqCounterStr = get(mapActuatorSparePartsSeqNum,cLineDoc);
+        if(newActSpareSeqCounterStr <> "") {
+            newActSpareSeqCounter = atof(newActSpareSeqCounterStr);
+            relatedActDocNumber = cLineDoc;
+        }
+
+    } elif (itemType == "SP" AND pLineDocNum == relatedActDocNumber){ // if we found a spare which related to RA Doc number
+         newActSpareSeqCounter = newActSpareSeqCounter + 0.01;
+         lineResStr = lineResStr + cLineDoc + "~lineNumber_line~AP-"+ string(newActSpareSeqCounter) + "|";
+
+    }
+}
+*/
+
+
+////////// NEW logic  start here
+modelHeaderSeqF = 0.0;
+modelSpareSeqF = 0.0;
+
+
+relatedActSeqF = 0.0;
+relatedActSpareSeqF = 0.0;
+
+docToRelActSeqMap = dict("string"); // docNum => relatedActSeqMap
+docToRelSpareSeqMap = dict("string"); // docNum => modelSpareSeqF
+docToRelActSpareSeqMap = dict("string"); // Ra doc num => relatedActSpareSeqF
+docToActSpareSeqMap = dict("string"); // A doc num => modelSpareSeqF
+
+
+for line in line_fcoProcess {
+    currentLineDoc=line._document_number;
+    itemType = line.itemType_line;
+    altValue = line.alt_line;
+    parentItemType = line.parentItemType_line;
+    parentLineDocNumber = line.parentLineNumber_line;
+
+
+    if(itemType == "V") {
+        modelHeaderSeqF = modelHeaderSeqF + 1.0;
+        lineResStr = lineResStr + currentLineDoc + "~lineNumber_line~" + string(modelHeaderSeqF) +"|";
+
+        put(docToRelActSeqMap,currentLineDoc,string(modelHeaderSeqF));
+        put(docToRelSpareSeqMap,currentLineDoc,string(modelHeaderSeqF));
+    } elif (itemType == "A") {
+        modelHeaderSeqF = modelHeaderSeqF + 1.0;
+        lineResStr = lineResStr + currentLineDoc + "~lineNumber_line~" + string(modelHeaderSeqF) +"|";
+
+        put(docToActSpareSeqMap,currentLineDoc,string(modelHeaderSeqF));
+    } elif (itemType == "RA") {
+        relatedActSeqStr = get(docToRelActSeqMap, parentLineDocNumber);
+        if(relatedActSeqStr == "") {
+            relatedActSeqStr = "0.0";
+        }
+        relatedActSeqF = atof(relatedActSeqStr) + 0.1;
+        lineResStr = lineResStr + currentLineDoc + "~lineNumber_line~" + string(relatedActSeqF) +"|";
+
+        put(docToRelActSeqMap, parentLineDocNumber, string(relatedActSeqF)); // update the rel act seq counter
+        put(docToRelActSpareSeqMap, currentLineDoc, string(relatedActSeqF)); // update the rel act spare seq counter
+    } elif (itemType == "SP") {
+        if(parentItemType == "V") {
+            modelSpareSeqStr = get(docToRelSpareSeqMap, parentLineDocNumber);
+            if(modelSpareSeqStr == "") {
+                modelSpareSeqStr = "0.0";
+            }
+            modelSpareSeqF = atof(modelSpareSeqStr) + 0.01;
+            lineResStr = lineResStr + currentLineDoc + "~lineNumber_line~P-" + string(modelSpareSeqF) +"|";
+            put(docToRelSpareSeqMap, parentLineDocNumber, string(modelSpareSeqF)); // update the model spare seq counter
+        } elif(parentItemType == "A")  {
+            modelSpareSeqStr = get(docToActSpareSeqMap, parentLineDocNumber);
+            if(modelSpareSeqStr == "") {
+                modelSpareSeqStr = "0.0";
+            }
+            modelSpareSeqF = atof(modelSpareSeqStr) + 0.01;
+            lineResStr = lineResStr + currentLineDoc + "~lineNumber_line~AP-" + string(modelSpareSeqF) +"|";
+            put(docToActSpareSeqMap, parentLineDocNumber, string(modelSpareSeqF)); // update the model spare seq counter
+
+        } elif(parentItemType == "RA") {
+            relatedActSpareSeqStr = get(docToRelActSpareSeqMap, parentLineDocNumber);
+            if(relatedActSpareSeqStr == "") {
+                relatedActSpareSeqStr = "0.0";
+            }
+            relatedActSpareSeqF = atof(relatedActSpareSeqStr) + 0.01;
+            lineResStr = lineResStr + currentLineDoc + "~lineNumber_line~AP-" + string(relatedActSpareSeqF) +"|";
+
+            put(docToRelActSpareSeqMap, parentLineDocNumber, string(relatedActSpareSeqF));   // update the rel act spare seq  counter
+        }
+
+    }
+
+}
+
+lineResStr = lineResStr + "1"+"~selectedValveItem_quote~"+"" +"|";
+lineResStr = lineResStr + "1"+"~valveConfigValues_quote~"+""+"|";
+return lineResStr;

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="rest-example-0.1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/target/rest-example-0.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

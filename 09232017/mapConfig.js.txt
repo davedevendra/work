@@ -1,0 +1,444 @@
+// version 2.0
+// 09/23/2017
+
+lineResStr = "";
+maindoc = _quote_fcoprocess_document_number;
+multiValue=0.88;
+mfgBUValue = "Lynchburg";
+quantity = "";
+leadTime = finalDeliveryDate_quote;
+
+altValue = "P";
+
+parentSpareDocumentMap=dict("string"); // docNum valve Parent => child spare parts string
+parentSpareDocumentToCountMap = dict("string"); // docNum valve Parent => total child spare parts
+
+
+parentActuatorDocumentMap=dict("string");  // docNum valve Parent => child actuator string
+parentActuatorDocumentToCountMap=dict("string"); // docNum valve Parent => total child related actuator
+
+parentValveActuatorLineNumCounterMap = dict("string"); // docNum Valve Parent => LineNumber counter for related actuator
+
+mapDocNumToParentItemType = dict("string");
+//print "----" + _system_selected_document_number+">>>"+selectedValveItem_quote;
+lineHeaderCounterValueF = 0.0;
+if(itemGroupHeaderCounter_quote == "" OR len(itemGroupHeaderCounter_quote) <=0) {
+    lineHeaderCounterValueF = 1.0;
+} else {
+    lineHeaderCounterValueF = atof(itemGroupHeaderCounter_quote);
+}
+
+for line in line_fcoProcess{
+
+    //lineNo=0;
+    linedoc=line._document_number;
+    lineItemType = "-1";
+    parentItemType="-1";
+
+    tagNo="";
+    modelName="";
+    modelDesc="";
+
+    businessUnit="";
+    isPart = true;
+    isActuator=false;
+
+    //print line._config_attr_info;
+    //print line._model_variable_name;
+    //print _system_selected_document_number;
+
+    parentLineItemNumber="-";
+    if(linedoc == selectedValveItem_quote) {
+        parentLineItemNumber="-1";
+    } else {
+        if(selectedValveItem_quote <> "") {
+          parentLineItemNumber = selectedValveItem_quote;
+        } else {
+          parentLineItemNumber = line.parentLineNumber_line;
+        }
+    }
+
+
+    //Check whether model line item or part line item
+    // if(len(line._model_variable_name)>0){
+    if(line._model_variable_name == "null" OR len(line._model_variable_name)>0) {
+        isPart = false;
+    }else{
+        isPart = true;
+    }
+    //print isPart;
+
+    /// common
+    tagNo=getconfigattrvalue(line._document_number, "tagNumberColumn1_PF");
+    if(tagNo == "null " OR len(tagNo) <=0) {
+      tagNo = "";
+    }
+
+    tagNoFullStr = tagNo;
+    tagNoArr = split(tagNoFullStr,"$,$");
+    tagNo = tagNoArr[0];
+    
+
+
+    ///////////
+    //TMBV
+    ///////////
+
+    if(line._model_variable_name == "valbartTMBV") {
+        //tagNo=getconfigattrvalue(line._document_number, "tagNumber_PF");
+
+        modelName=getconfigattrvalue(line._document_number, "modelName_VALB");
+        modelDesc=getconfigattrvalue(line._document_number, "modelDescription_VALB");
+        mfgBUValue = getconfigattrvalue(line._document_number, "siteCodeDescription_AP");
+        quantity = getconfigattrvalue(line._document_number,"productQuantity_PF");
+
+        businessUnit="TMBV";
+        lineItemType="V";
+
+
+        lineNumberValue = line._group_sequence_number;
+        //lineNumberValue = string(lineHeaderCounterValueF);
+        parentLineItemNumber = "-1";
+        altValue = "P";
+
+
+        //parentLineItemNumber = line._parent_doc_number + "::" + line._parent_line_item +"##"+_system_selected_document_number;
+        relatedActuatorSequenceCounter = atof(line._group_sequence_number) + 0.1;
+        //relatedActuatorSequenceCounter = lineHeaderCounterValueF + 0.1;
+        put(parentValveActuatorLineNumCounterMap, linedoc, string(relatedActuatorSequenceCounter));
+
+        lineResStr = lineResStr + linedoc +"~lineNumber_line~" + lineNumberValue + "|"
+                        +linedoc + "~tagN_line~" + tagNo+ "|"
+                        +linedoc + "~_model_name~" + modelName+ "|"
+                        +linedoc + "~modelDescription_line~" + modelDesc+ "|"
+                        +linedoc + "~leadTimeInt_line~" + string(leadTime) + "|"
+                        +linedoc + "~businessUnit_line~" + businessUnit+ "|"
+                        +linedoc + "~mfgBU_line~" + mfgBUValue+ "|"
+                        +linedoc + "~alt_line~"+altValue +"|"
+                        +linedoc + "~multi_line~"+string(multiValue) +"|"
+                        +linedoc + "~parentLineNumber_line~"+parentLineItemNumber+"|"
+                        +linedoc + "~relatedActuatorSequenceCounter_line~"+string(relatedActuatorSequenceCounter)+"|"
+                        +linedoc + "~parentItemType_line~"+parentItemType+"|"
+                        +linedoc + "~_price_quantity~"+quantity+"|"
+                        +linedoc + "~itemType_line~"+lineItemType+"|";
+
+        lineHeaderCounterValueF = lineHeaderCounterValueF + 1.0;
+    }
+
+    ////////////
+    //TX3
+    ////////////
+    if(line._model_variable_name == "durcoTX3") {
+        //tagNo=getconfigattrvalue(line._document_number, "tagNumberColumn1_PF");
+        modelName=getconfigattrvalue(line._document_number, "modelName_TX3");
+        modelDesc=getconfigattrvalue(line._document_number, "modelDescription_TX3");
+        mfgBUValue = getconfigattrvalue(line._document_number, "siteCodeDescription_AP");
+        quantity = getconfigattrvalue(line._document_number,"productQuantity_PF");
+       // modelName = line._model_name;
+       // modelDesc =  modelName;
+        businessUnit="Durco TX3";
+        altValue = "P";
+        lineItemType="V";
+
+
+        lineNumberValue = line._group_sequence_number;
+        //lineNumberValue = string(lineHeaderCounterValueF);
+        parentLineItemNumber = "-1";
+        relatedActuatorSequenceCounter = atof(line._group_sequence_number) + 0.1;
+        //relatedActuatorSequenceCounter = lineHeaderCounterValueF + 0.1;
+        put(parentValveActuatorLineNumCounterMap, linedoc, string(relatedActuatorSequenceCounter));
+        //parentLineItemNumber = line._parent_doc_number + "::" + line._parent_line_item+"##"+_system_selected_document_number;
+
+
+        lineResStr = lineResStr + linedoc + "~lineNumber_line~"+ lineNumberValue +"|"
+                        +linedoc + "~tagN_line~" + tagNo+ "|"
+                        +linedoc + "~_model_name~" + modelName+ "|"
+                        +linedoc + "~modelDescription_line~" + modelDesc+ "|"
+                        +linedoc + "~leadTimeInt_line~" + string(leadTime) + "|"
+                        +linedoc + "~businessUnit_line~" + businessUnit+ "|"
+                        +linedoc + "~mfgBU_line~" + mfgBUValue+ "|"
+                        +linedoc + "~alt_line~"+altValue +"|"
+                        +linedoc + "~multi_line~"+string(multiValue) +"|"
+                        +linedoc + "~parentLineNumber_line~"+parentLineItemNumber+"|"
+                        +linedoc + "~relatedActuatorSequenceCounter_line~"+string(relatedActuatorSequenceCounter)+"|"
+                        +linedoc + "~parentItemType_line~"+parentItemType+"|"
+                        +linedoc + "~_price_quantity~"+quantity+"|"
+                        +linedoc + "~itemType_line~"+lineItemType+"|";
+        lineHeaderCounterValueF = lineHeaderCounterValueF + 1.0;
+
+    }
+
+
+    ///////////////
+    // LFPS
+    ////////////////
+
+
+    if(line._model_variable_name == "lFPSActuators_LFPS") {
+        //tagNo=getconfigattrvalue(line._document_number, "tagNumber_PF");
+        mfgBUValue = getconfigattrvalue(line._document_number, "siteCodeDescription_AP");
+        quantity = getconfigattrvalue(line._document_number,"productQuantity_PF");
+        //modelName=getconfigattrvalue(line._document_number, "modelName_VALB");
+        //modelDesc=getconfigattrvalue(line._document_number, "modelDescription_VALB");
+        modelName = line._model_name;
+        modelDesc =  modelName;
+        businessUnit="LFPS Actuators";
+        altValue = "P";
+        lineItemType="A";
+
+
+        lineNumberValue = line._group_sequence_number;
+        //lineNumberValue = string(lineHeaderCounterValueF);
+
+
+        if(selectedValveItem_quote == "") {
+          if(line.parentLineNumber_line == "-") { // individual actuator item
+            parentLineItemNumber = "-";
+          } elif (line.parentLineNumber_line <> "-1" AND line.parentLineNumber_line <> "") { // related actuator item
+            parentLineItemNumber = line.parentLineNumber_line;
+          } else {
+            parentLineItemNumber = "-";
+          }
+        } else {
+          if(line.parentLineNumber_line == "-") { // individual actuator item
+            parentLineItemNumber = "-";
+          } elif(line.parentLineNumber_line <> "-1" AND line.parentLineNumber_line <> "") {// related actuator item
+            parentLineItemNumber = line.parentLineNumber_line;
+          } else {
+            parentLineItemNumber = selectedValveItem_quote;
+          }
+        }
+        //parentLineItemNumber = line._parent_doc_number + "::" + line._parent_line_item+"##"+_system_selected_document_number;
+        lineItemType="A";
+        // found the related actuator item
+        if(parentLineItemNumber <> "" AND parentLineItemNumber <> "-1" AND parentLineItemNumber <> "-" AND atoi(parentLineItemNumber)>=1) {
+            //check for parent key and form the correct related actuator children string for the same.
+            // in the format as childDoc1+'#C#'+childDoc2+'#C#'+childDoc3
+            childrenDocActuatorString="";
+            if(containsKey(parentActuatorDocumentMap,parentLineItemNumber)){
+                childrenDocActuatorString = get(parentActuatorDocumentMap, parentLineItemNumber);
+                if(childrenDocActuatorString == "") {
+                    childrenDocActuatorString = childrenDocActuatorString + linedoc;
+                } else {
+                    childrenDocActuatorString = childrenDocActuatorString+"#C#"+linedoc;
+                }
+            } else {
+                //add first key
+                childrenDocActuatorString = childrenDocActuatorString + linedoc;
+            }
+            //print childrenDocActuatorString;
+            put(parentActuatorDocumentMap,parentLineItemNumber, childrenDocActuatorString);
+            ct=0;
+
+            if(containsKey(parentActuatorDocumentToCountMap,parentLineItemNumber)) {
+                apcount = get(parentActuatorDocumentToCountMap, parentLineItemNumber);
+                if(apcount== "") {
+                    ct =  ct +1;
+                } else {
+                    ct = atoi(apcount);
+                    ct = ct + 1;
+                }
+
+            } else {
+                 ct =  ct +1;
+            }
+            put(parentActuatorDocumentToCountMap, parentLineItemNumber, string(ct));
+            lineItemType="RA"; // related Actuator
+            realActLineNumCounterStr = get(parentValveActuatorLineNumCounterMap, parentLineItemNumber);
+            realActLineNum = 0.0;
+            if(realActLineNumCounterStr <> "") {
+                realActLineNum = atof(realActLineNumCounterStr);
+                realActLineNum = realActLineNum + 1;
+            }
+            lineResStr = lineResStr + linedoc + "~relatedActuatorSequenceCounter_line~"+ string(realActLineNum) +"|"; // start value for related actuator line #
+        } else {
+            lineHeaderCounterValueF = lineHeaderCounterValueF + 1.0;
+        }
+
+        if(lineItemType == "RA") {
+            parentItemType="V";
+        }
+        lineResStr = lineResStr + linedoc + "~lineNumber_line~"+ lineNumberValue +"|"
+                        +linedoc + "~tagN_line~" + tagNo+ "|"
+                        +linedoc + "~_model_name~" + modelName+ "|"
+                        +linedoc + "~modelDescription_line~" + modelDesc+ "|"
+                        +linedoc + "~leadTimeInt_line~" + string(leadTime) + "|"
+                        +linedoc + "~businessUnit_line~" + businessUnit+ "|"
+                        +linedoc + "~mfgBU_line~" + mfgBUValue+ "|"
+                        +linedoc + "~alt_line~"+altValue +"|"
+                        +linedoc + "~multi_line~"+string(multiValue) +"|"
+                        +linedoc + "~parentLineNumber_line~"+parentLineItemNumber+"|"
+                        +linedoc + "~parentItemType_line~"+parentItemType+"|"
+                        +linedoc + "~_price_quantity~"+quantity+"|"
+                        +linedoc + "~itemType_line~"+lineItemType+"|";
+
+
+
+    }
+
+    //////////////////
+    // argus
+    /////////////////
+    if(line._model_variable_name == "argusTMBV") {
+        //tagNo=getconfigattrvalue(line._document_number, "tagNumber_PF");
+        mfgBUValue = getconfigattrvalue(line._document_number, "siteCodeDescription_AP");
+        quantity = getconfigattrvalue(line._document_number,"productQuantity_PF");
+        //modelName=getconfigattrvalue(line._document_number, "modelName_VALB");
+        //modelDesc=getconfigattrvalue(line._document_number, "modelDescription_VALB");
+        modelName = line._model_name;
+        modelDesc =  modelName;
+        businessUnit="Argus TMBV";
+        altValue = "P";
+        lineItemType="V";
+
+
+        lineNumberValue = line._group_sequence_number;
+        //lineNumberValue = string(lineHeaderCounterValueF);
+        parentLineItemNumber = "-1";
+        relatedActuatorSequenceCounter = atof(line._group_sequence_number) + 0.1;
+        //relatedActuatorSequenceCounter = lineHeaderCounterValueF + 0.1;
+        put(parentValveActuatorLineNumCounterMap, linedoc, string(relatedActuatorSequenceCounter));
+        //parentLineItemNumber = line._parent_doc_number + "::" + line._parent_line_item+"##"+_system_selected_document_number;
+
+
+        lineResStr = lineResStr + linedoc + "~lineNumber_line~"+ lineNumberValue +"|"
+                        +linedoc +"~tagN_line~" + tagNo+ "|"
+                        +linedoc + "~_model_name~" + modelName+ "|"
+                        +linedoc + "~modelDescription_line~" + modelDesc+ "|"
+                        +linedoc + "~leadTimeInt_line~" +  string(leadTime) + "|"
+                        +linedoc + "~businessUnit_line~" + businessUnit+ "|"
+                        +linedoc + "~mfgBU_line~" + mfgBUValue+ "|"
+                        +linedoc + "~alt_line~"+altValue +"|"
+                        +linedoc + "~multi_line~"+string(multiValue) +"|"
+                        +linedoc + "~parentLineNumber_line~"+parentLineItemNumber+"|"
+                        +linedoc + "~relatedActuatorSequenceCounter_line~"+string(relatedActuatorSequenceCounter)+"|"
+                        +linedoc + "~parentItemType_line~"+parentItemType+"|"
+                        +linedoc + "~_price_quantity~"+quantity+"|"
+                        +linedoc + "~itemType_line~"+lineItemType+"|";
+        lineHeaderCounterValueF = lineHeaderCounterValueF + 1.0;
+
+
+    }
+
+
+
+
+    if(isPart) {
+        //if part
+
+        //tagNo=getconfigattrvalue(linedoc, "tagNumber_PF");
+        mfgBUValue = getconfigattrvalue(line._document_number, "siteCodeDescription_AP");
+        // modelName=getconfigattrvalue(linedoc, "_part_display_number");
+        modelName = line._part_display_number;
+        // modelDesc=getconfigattrvalue(linedoc, "_part_desc");
+        modelDesc = line._part_desc;
+
+
+        tagNo="";
+        businessUnit="TMBV";
+        altValue = "P";
+        lineItemType = "SP";
+
+
+        //print modelName;
+        //print modelDesc;
+        //lineNumber = line._group_sequence_number;
+        //lineNumberValue  = "";
+        lineNumberValue = "P-" + line._group_sequence_number;
+        parentLineItemNumber = line._parent_doc_number;
+        //get the parent Item Type
+        itemTypeStr = get(mapDocNumToParentItemType, line._parent_doc_number);
+        //if(itemTypeStr <> "-1" AND itemTypeStr <> "") {
+            if(itemTypeStr == "RA") {
+                parentItemType = "RA";
+            } elif(itemTypeStr == "V") {
+                parentItemType = "V";
+            } elif(parentItemType == "A") {
+                parentItemType = "A";
+            } else {
+                parentItemType = "SP";
+            }
+        //}
+
+        //parentLineItemNumber = line._parent_doc_number + "::" + line._parent_line_item+"##"+_system_selected_document_number;
+
+        //check for parent key and form the correct spare children string for the same.
+        // in the format as chidSpareDocNo+'#S#'+childSpareDocNo2+'#C#'+...
+        childrenDocSparePartsString="";
+        if(containsKey(parentSpareDocumentMap,line._parent_doc_number)){
+            childrenDocSparePartsString = get(parentSpareDocumentMap, line._parent_doc_number);
+            if(childrenDocSparePartsString == "") {
+                childrenDocSparePartsString = childrenDocSparePartsString + linedoc;
+            } else {
+                childrenDocSparePartsString = childrenDocSparePartsString+"#S#"+linedoc;
+            }
+        } else {
+            //add first key
+            childrenDocSparePartsString = childrenDocSparePartsString + linedoc;
+        }
+        //print childrenDocSparePartsString;
+        put(parentSpareDocumentMap,line._parent_doc_number, childrenDocSparePartsString);
+        ct=0;
+
+        if(containsKey(parentSpareDocumentToCountMap,line._parent_doc_number)) {
+            spcount = get(parentSpareDocumentToCountMap, line._parent_doc_number);
+            if(spcount== "") {
+                ct =  ct +1;
+            } else {
+                ct = atoi(spcount);
+                ct = ct + 1;
+            }
+
+        } else {
+             ct =  ct +1;
+        }
+        put(parentSpareDocumentToCountMap, line._parent_doc_number, string(ct));
+
+        lineResStr = lineResStr + linedoc + "~lineNumber_line~"+ lineNumberValue +"|"
+                        +linedoc + "~tagN_line~" + tagNo+ "|"
+                        +linedoc + "~_model_name~" + modelName+ "|"
+                        +linedoc + "~modelDescription_line~" + modelDesc+ "|"
+                        +linedoc + "~leadTimeInt_line~" + string(leadTime) + "|"
+                        +linedoc + "~businessUnit_line~" + businessUnit+ "|"
+                        +linedoc + "~mfgBU_line~" + mfgBUValue+ "|"
+                        +linedoc + "~parentLineNumber_line~"+parentLineItemNumber+"|"
+                        +linedoc + "~parentItemType_line~"+parentItemType+"|"
+                        +linedoc + "~itemType_line~"+lineItemType+"|";
+
+    }
+    put(mapDocNumToParentItemType,linedoc,lineItemType);
+
+}
+
+// set the totalCountChildSpareParts_line value with child spare parts doc string
+
+parentKeysArr =  keys(parentSpareDocumentMap);
+for key in parentKeysArr {
+    partsString = get(parentSpareDocumentMap, key);
+    spcount = get(parentSpareDocumentToCountMap,key);
+    if(spcount =="") {
+        spcount ="0";
+    }
+    lineResStr = lineResStr + key +"~childSparePartsDocumentNumbers_line~"+partsString + "|";
+    lineResStr = lineResStr + key +"~totalCountChildSpareParts_line~"+ spcount + "|";
+    print partsString;
+}
+
+// set the childSubModelDocumentNumbers_line value with child sub models(actuators) doc string
+
+parentKeysArr =  keys(parentActuatorDocumentMap);
+for key in parentKeysArr {
+    actString = get(parentActuatorDocumentMap, key);
+    acount = get(parentActuatorDocumentToCountMap,key);
+    if(acount =="") {
+        acount ="0";
+    }
+    lineResStr = lineResStr + key +"~childSubModelDocumentNumbers_line~"+actString + "|";
+    lineResStr = lineResStr + key +"~totalChildSubModelCount_line~"+ acount + "|";
+    print actString;
+}
+
+//lineResStr = lineResStr + "1~relatedActuatorSequenceCounter_line~"+string(lineHeaderCounterValueF)+"|";
+lineResStr = lineResStr + "1~selectedValveItem_quote~"+"|";
+
+return lineResStr;
