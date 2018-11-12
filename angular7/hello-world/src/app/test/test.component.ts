@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input,Output,EventEmitter} from '@angular/core';
 import { adjustBlueprintForNewNode } from '@angular/core/src/render3/instructions';
 import { InterpolationConfig } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-test',
@@ -57,6 +58,12 @@ export class TestComponent implements OnInit {
 
   public myColor = 'blue';
 
+  public colors = ['red', 'green', 'yellow', 'blue'];
+
+  @Input('parentData') public parentName;
+
+  @Output() public childEvent = new EventEmitter()
+
   constructor() { }
 
   ngOnInit() {
@@ -79,6 +86,10 @@ export class TestComponent implements OnInit {
 
   selectColor(value) {
     this.myColor = value;
+  }
+
+  fireEvent() {
+    this.childEvent.emit('Title coming from test component is Wow');
   }
 
 }

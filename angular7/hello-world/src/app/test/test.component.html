@@ -27,7 +27,7 @@
 <h1> Two Way Data Binding</h1>
 <input [(ngModel)]="myName" type="text">
 {{myName}}
--->
+
 
 <h1> Structural Directives(ngIf,ngSwitch,ngFor)</h1>
 <h2>ngIf</h2>
@@ -60,4 +60,14 @@
 </div>
 
 
+<h2>ngFor</h2>
+<div *ngFor="let color of colors; index as i; odd as o; even as e; first as f; last as l;">
+  <h4>{{i}} {{color}} {{o}} {{e}} {{f}} {{l}}</h4>
+</div>
 
+-->
+
+<h1>Data passing between components app <-> test</h1>
+
+<h2> Data from the parent component is "{{parentName}}" </h2>
+<button (click)="fireEvent()">Emit Event</button>

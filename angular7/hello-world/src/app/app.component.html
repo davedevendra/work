@@ -3,7 +3,7 @@
   <h1>
     Welcome to {{ title }}!
   </h1>
-  <app-test></app-test>
-
-  
+  <app-test [parentData]="myName" (childEvent)="title=$event"></app-test>
+  <app-employee-list></app-employee-list>
+  <app-employee-detail></app-employee-detail>
 </div>
