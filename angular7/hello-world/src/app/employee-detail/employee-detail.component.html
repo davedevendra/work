@@ -4,6 +4,8 @@
 <h4 style='text-align: left'>
   Employee Details
 </h4>
+<h5>{{errorMsg}}</h5>
+
 
 <ul *ngFor="let employee of employees" style="text-align: left">
   <li>{{employee.id}} {{employee.name}} {{employee.age}}</li>
